@@ -33,7 +33,6 @@ public sealed class PersonRepository : BaseRepository<Person>, IPersonRepository
         };
 
         await _context.RelatedIndividuals.AddAsync(relatedIndividual);
-        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteRelatedIndividualAsync(int personId, int relatedPersonId)
@@ -47,7 +46,6 @@ public sealed class PersonRepository : BaseRepository<Person>, IPersonRepository
         }
 
         _context.RelatedIndividuals.Remove(relatedIndividual);
-        await _context.SaveChangesAsync();
     }
 
     public async Task<List<Person>> SearchAsync(string searchTerm)
