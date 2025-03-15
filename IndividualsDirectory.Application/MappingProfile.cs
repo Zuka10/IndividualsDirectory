@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using IndividualsDirectory.Application.City;
 using IndividualsDirectory.Application.Person;
 using IndividualsDirectory.Application.Person.Command.Create;
 using IndividualsDirectory.Domain.Entities;
@@ -10,8 +9,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Domain.Entities.City, CityDto>();
-        CreateMap<Domain.Entities.City, CityDto>().ReverseMap();
         CreateMap<CreatePersonCommand, Domain.Entities.Person>()
             .ForMember(dest => dest.PhoneNumbers, opt => opt.MapFrom(src => src.PhoneNumbers))
             .ForMember(dest => dest.RelatedIndividuals, opt => opt.MapFrom(src => src.RelatedIndividuals));
