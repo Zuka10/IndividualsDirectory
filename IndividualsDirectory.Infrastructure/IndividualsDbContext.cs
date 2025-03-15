@@ -15,6 +15,7 @@ public class IndividualsDbContext(DbContextOptions<IndividualsDbContext> options
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IndividualsDbContext).Assembly);
+        modelBuilder.SeedData();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
