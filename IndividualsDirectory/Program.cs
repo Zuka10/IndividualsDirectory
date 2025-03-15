@@ -1,4 +1,5 @@
 using IndividualsDirectory.Application;
+using IndividualsDirectory.Application.Common;
 using IndividualsDirectory.Domain.Abstractions;
 using IndividualsDirectory.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<IndividualsDbContext>(options =>
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ImageService>();
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(IndividualsDirectory.Application.AssemblyRefference).Assembly));
 
 builder.Services.AddControllers();
