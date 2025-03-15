@@ -1,0 +1,6 @@
+@IndividualsDirectory_HostAddress = http://localhost:5122
+
+GET {{IndividualsDirectory_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
