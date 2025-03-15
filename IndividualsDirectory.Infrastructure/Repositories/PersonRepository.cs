@@ -1,6 +1,7 @@
 ﻿using IndividualsDirectory.Domain.Abstractions;
 using IndividualsDirectory.Domain.Entities;
 using IndividualsDirectory.Domain.Enums;
+using IndividualsDirectory.Domain.Report;
 using IndividualsDirectory.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,42 @@ public sealed class PersonRepository : BaseRepository<Person>, IPersonRepository
         }
 
         _context.RelatedIndividuals.Remove(relatedIndividual);
+    }
+
+    public async Task<List<RelatedIndividualsReportModel>> GetRelatedIndividualsReportAsync(CancellationToken cancellationToken)
+    {
+        var report = await _context.RelatedIndividuals
+            .GroupBy(r => new { r.PersonId, r.Relationship })
+            .Select(g => new
+            {
+                g.Key.PersonId,
+                g.Key.Relationship,
+                RelatedIndividualsCount = g.Count()
+            })
+            .ToListAsync(cancellationToken);
+
+        var result = new List<RelatedIndividualsReportModel>();
+
+        foreach (var item in report)
+        {
+            var person = await _context.Persons
+                .Where(p => p.Id == item.PersonId)
+                .Select(p => new { p.FirstName, p.LastName })
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (person != null)
+            {
+                result.Add(new RelatedIndividualsReportModel
+                {
+                    PersonId = item.PersonId,
+                    RelationshipType = item.Relationship,
+                    RelatedIndividualsCount = item.RelatedIndividualsCount,
+                    PersonName = $"{person.FirstName} {person.LastName}"
+                });
+            }
+        }
+
+        return result;
     }
 
     public async Task<List<Person>> SearchAsync(string searchTerm, int skip, int take)
