@@ -1,4 +1,4 @@
-﻿using IndividualsDirectory.Domain;
+﻿using IndividualsDirectory.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace IndividualsDirectory.Infrastructure;

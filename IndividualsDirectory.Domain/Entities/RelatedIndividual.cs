@@ -1,6 +1,6 @@
 ﻿using IndividualsDirectory.Domain.Enums;
 
-namespace IndividualsDirectory.Domain;
+namespace IndividualsDirectory.Domain.Entities;
 
 public class RelatedIndividual
 {

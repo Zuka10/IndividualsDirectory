@@ -1,4 +1,4 @@
-﻿namespace IndividualsDirectory.Domain;
+﻿namespace IndividualsDirectory.Domain.Entities;
 
 public class City
 {
