@@ -11,7 +11,7 @@ public class GetCityByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : I
 
     public async Task<CityDto> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = _mapper.Map<CityDto>(await _unitOfWork.CityRepository.GetAsync(c => c.Id == request.Id, cancellationToken));
+        var result = _mapper.Map<CityDto>(await _unitOfWork.CityRepository.GetAsNoTrackingAsync(c => c.Id == request.Id, cancellationToken));
         return result;
     }
 }

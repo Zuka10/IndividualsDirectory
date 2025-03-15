@@ -11,7 +11,7 @@ public class GetAllCityQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IR
 
     public async Task<List<CityDto>> Handle(GetAllCityQuery request, CancellationToken cancellationToken)
     {
-        var result = _mapper.Map<List<CityDto>>(await _unitOfWork.CityRepository.GetAllAsync(null, cancellationToken: cancellationToken));
+        var result = _mapper.Map<List<CityDto>>(await _unitOfWork.CityRepository.GetAllAsNoTrackingAsync(c => c.Name != string.Empty, cancellationToken: cancellationToken));
         return result;
     }
 }
