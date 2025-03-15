@@ -16,4 +16,11 @@ public class IndividualsDbContext(DbContextOptions<IndividualsDbContext> options
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IndividualsDbContext).Assembly);
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+        optionsBuilder.UseLazyLoadingProxies();
+    }
 }
