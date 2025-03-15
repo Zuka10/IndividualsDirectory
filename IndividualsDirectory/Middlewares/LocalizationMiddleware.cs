@@ -6,26 +6,50 @@ public class LocalizationMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
 
+
     public async Task InvokeAsync(HttpContext context)
     {
-        var supportedCultures = new[] { "en-US", "fr-FR", "es-ES", "ka-GE" };
+        var supportedCultures = new[] { "en-US", "ka-GE", "fr-FR", "es-ES" };
 
-        var acceptLanguage = context.Request.Headers["Accept-Language"].ToString();
-        if (string.IsNullOrEmpty(acceptLanguage))
+        var acceptLanguageHeader = context.Request.Headers["Accept-Language"].ToString();
+
+        string selectedCulture = "en-US";
+
+        if (!string.IsNullOrEmpty(acceptLanguageHeader))
         {
-            acceptLanguage = "en-US";
+            var languages = acceptLanguageHeader.Split(',')
+                .Select(lang => lang.Trim().Split(';').First())
+                .ToList();
+
+            foreach (var lang in languages)
+            {
+                if (supportedCultures.Contains(lang))
+                {
+                    selectedCulture = lang;
+                    break;
+                }
+
+                var matchingCulture = supportedCultures.FirstOrDefault(c => c.StartsWith(lang + "-"));
+                if (matchingCulture != null)
+                {
+                    selectedCulture = matchingCulture;
+                    break;
+                }
+            }
         }
 
-        string cultureName = acceptLanguage;
-        if (!supportedCultures.Contains(cultureName))
+        try
         {
-            var requestedLanguage = acceptLanguage.Split('-')[0];
-            cultureName = supportedCultures.FirstOrDefault(c => c.StartsWith(requestedLanguage)) ?? "en-US";
+            var culture = new CultureInfo(selectedCulture);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
         }
-
-        var culture = new CultureInfo(acceptLanguage);
-        Thread.CurrentThread.CurrentCulture = culture;
-        Thread.CurrentThread.CurrentUICulture = culture;
+        catch (CultureNotFoundException)
+        {
+            var defaultCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = defaultCulture;
+            Thread.CurrentThread.CurrentUICulture = defaultCulture;
+        }
 
         await _next(context);
     }
