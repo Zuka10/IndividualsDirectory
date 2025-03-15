@@ -16,7 +16,12 @@ public class SearchPersonQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : 
             return [];
         }
 
-        var persons = await _unitOfWork.PersonRepository.SearchAsync(request.SearchTerm);
+        int skip = (request.PageNumber - 1) * request.PageSize;
+        int take = request.PageSize;
+
+        var persons = await _unitOfWork.PersonRepository
+            .SearchAsync(request.SearchTerm, skip, take);
+
         var result = _mapper.Map<List<PersonDto>>(persons);
         return result;
     }

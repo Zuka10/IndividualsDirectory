@@ -48,12 +48,14 @@ public sealed class PersonRepository : BaseRepository<Person>, IPersonRepository
         _context.RelatedIndividuals.Remove(relatedIndividual);
     }
 
-    public async Task<List<Person>> SearchAsync(string searchTerm)
+    public async Task<List<Person>> SearchAsync(string searchTerm, int skip, int take)
     {
         return await _context.Persons
         .Where(p => p.FirstName.Contains(searchTerm) ||
                     p.LastName.Contains(searchTerm) ||
                     p.PersonalNumber.Contains(searchTerm))
+        .Skip(skip)
+        .Take(take)
         .ToListAsync();
     }
 }

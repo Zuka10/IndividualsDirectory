@@ -18,9 +18,9 @@ public class PersonController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpGet("search")]
-    public async Task<IActionResult> SearchPersons(string searchTerm)
+    public async Task<IActionResult> SearchPersons(string searchTerm, int pageNumber = 1, int pageSize = 10)
     {
-        var result = await _mediator.Send(new SearchPersonQuery { SearchTerm = searchTerm });
+        var result = await _mediator.Send(new SearchPersonQuery { SearchTerm = searchTerm, PageNumber = pageNumber, PageSize = pageSize });
         return Ok(result);
     }
 
