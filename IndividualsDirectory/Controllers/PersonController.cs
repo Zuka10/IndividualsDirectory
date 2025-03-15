@@ -18,56 +18,56 @@ public class PersonController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpGet("search")]
-    public async Task<IActionResult> SearchPersons(string searchTerm, int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> Search(string searchTerm, int pageNumber = 1, int pageSize = 10)
     {
         var result = await _mediator.Send(new SearchPersonQuery { SearchTerm = searchTerm, PageNumber = pageNumber, PageSize = pageSize });
         return Ok(result);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetPersons()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _mediator.Send(new GetAllPersonQuery());
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPerson(int id)
+    public async Task<IActionResult> Get(int id)
     {
         var result = await _mediator.Send(new GetPersonByIdQuery { Id = id });
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePerson([FromForm] CreatePersonCommand command)
+    public async Task<IActionResult> Create([FromForm] CreatePersonCommand command)
     {
         var result = await _mediator.Send(command);
         return Ok(result);
     }
 
     [HttpPost("/AddRelatedPerson")]
-    public async Task<IActionResult> AddRelatedPerson([FromForm] AddRelatedPersonCommand command)
+    public async Task<IActionResult> AddRelated([FromForm] AddRelatedPersonCommand command)
     {
         var result = await _mediator.Send(command);
         return Ok(result);
     }
 
     [HttpDelete("/RemoveRelatedPerson")]
-    public async Task<IActionResult> RemoveRelatedPerson([FromForm] RemoveRelatedPersonCommand command)
+    public async Task<IActionResult> RemoveRelated([FromForm] RemoveRelatedPersonCommand command)
     {
         var result = await _mediator.Send(command);
         return Ok(result);
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdatePerson([FromForm] UpdatePersonCommand command)
+    public async Task<IActionResult> Update([FromForm] UpdatePersonCommand command)
     {
         var result = await _mediator.Send(command);
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePerson(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var result = await _mediator.Send(new DeletePersonCommand { Id = id });
         return Ok(result);

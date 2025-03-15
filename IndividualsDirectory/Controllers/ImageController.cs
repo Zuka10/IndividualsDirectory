@@ -13,7 +13,7 @@ public class ImageController(IMediator mediator, ImageService imageService) : Co
     private readonly ImageService _imageService = imageService;
 
     [HttpPost]
-    public async Task<IActionResult> UploadAndAssignImage(int personId, IFormFile image)
+    public async Task<IActionResult> UploadAndAssign(int personId, IFormFile image)
     {
         if (image == null || image.Length == 0)
             return BadRequest("Invalid image file.");
