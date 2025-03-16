@@ -46,6 +46,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity>
         return ValueTask.CompletedTask;
     }
 
+    public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    {
+        await _set.AddRangeAsync(entities, cancellationToken);
+    }
+
     public ValueTask UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         _set.Update(entity);
