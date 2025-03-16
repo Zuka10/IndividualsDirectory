@@ -26,8 +26,6 @@ public class CreatePersonCommand : IRequest<int>
 
     public int CityId { get; set; }
 
-    public IFormFile? Image { get; set; }
-
     public List<PhoneNumberDto> PhoneNumbers { get; set; } = [];
     public List<RelatedPersonDto> RelatedIndividuals { get; set; } = [];
 }

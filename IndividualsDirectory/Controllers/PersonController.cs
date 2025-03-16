@@ -47,7 +47,7 @@ public class PersonController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] CreatePersonCommand command)
+    public async Task<IActionResult> Create(CreatePersonCommand command)
     {
         var personId = await _mediator.Send(command);
 

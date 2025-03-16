@@ -14,24 +14,14 @@ public class CreatePersonCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, 
     public async Task<int> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
     {
         var person = _mapper.Map<Domain.Entities.Person>(request);
+        var phoneNumbers = _mapper.Map<List<Domain.Entities.PhoneNumber>>(request.PhoneNumbers);
+        var relatedIndividuals = _mapper.Map<List<Domain.Entities.RelatedIndividual>>(request.RelatedIndividuals);
 
-        if (request.Image != null)
-        {
-            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-            Directory.CreateDirectory(uploadsFolder);
-
-            string uniqueFileName = $"{Guid.NewGuid()}_{request.Image.FileName}";
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await request.Image.CopyToAsync(fileStream);
-            }
-
-            person.ImagePath = $"/images/{uniqueFileName}";
-        }
+        person.PhoneNumbers = phoneNumbers;
+        person.RelatedIndividuals = relatedIndividuals;
 
         await _unitOfWork.PersonRepository.AddAsync(person, cancellationToken);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return person.Id;
