@@ -10,9 +10,15 @@ public class AddRelatedPersonCommandHandler(IUnitOfWork unitOfWork) : IRequestHa
 
     public async Task<bool> Handle(AddRelatedPersonCommand request, CancellationToken cancellationToken)
     {
-        var person = await _unitOfWork.PersonRepository.GetAsync(p => p.Id == request.PersonId, cancellationToken) ?? throw new PersonNotFoundException("Person with following id not found");
+        if (request.PersonId == request.RelatedPersonId) throw new RelatedPersonIsSameAsPersonException("Person and related person cannot be the same");
 
-        await _unitOfWork.PersonRepository.AddRelatedIndividualAsync(request.PersonId, request.RelatedPersonId, request.Relationship);
+        var person = await _unitOfWork.PersonRepository.GetAsync(p => p.Id == request.PersonId, cancellationToken)
+            ?? throw new PersonNotFoundException($"Person with following id: {request.PersonId} not found");
+
+        var relatedPerson = await _unitOfWork.PersonRepository.GetAsync(p => p.Id == request.RelatedPersonId, cancellationToken)
+            ?? throw new PersonNotFoundException($"Related person with following id: {request.RelatedPersonId} not found");
+
+        await _unitOfWork.PersonRepository.AddRelatedIndividualAsync(person.Id, relatedPerson.Id, request.Relationship);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }

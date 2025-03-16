@@ -30,6 +30,13 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 "ValidationError",
                 "The relationship does not exist.");
         }
+        catch (RelatedPersonIsSameAsPersonException)
+        {
+            await CreateErrorResponse(context,
+                StatusCodes.Status400BadRequest,
+                "ValidationError",
+                "Person and related person cannot be the same.");
+        }
         catch (PersonNotFoundException)
         {
             await CreateErrorResponse(context,

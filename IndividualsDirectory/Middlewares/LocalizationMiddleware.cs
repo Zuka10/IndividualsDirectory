@@ -6,7 +6,6 @@ public class LocalizationMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
 
-
     public async Task InvokeAsync(HttpContext context)
     {
         var supportedCultures = new[] { "en-US", "ka-GE", "fr-FR", "es-ES" };
@@ -18,7 +17,7 @@ public class LocalizationMiddleware(RequestDelegate next)
         if (!string.IsNullOrEmpty(acceptLanguageHeader))
         {
             var languages = acceptLanguageHeader.Split(',')
-                .Select(lang => lang.Trim().Split(';').First())
+                .Select(lang => lang.Trim().Split(';')[0])
                 .ToList();
 
             foreach (var lang in languages)

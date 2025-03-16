@@ -7,14 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IndividualsDirectory.Infrastructure.Repositories;
 
-public sealed class PersonRepository : BaseRepository<Person>, IPersonRepository
+public sealed class PersonRepository(IndividualsDbContext context) : BaseRepository<Person>(context), IPersonRepository
 {
-    private readonly IndividualsDbContext _context;
-
-    public PersonRepository(IndividualsDbContext context) : base(context)
-    {
-        _context = context;
-    }
+    private readonly IndividualsDbContext _context = context;
 
     public async Task AddRelatedIndividualAsync(int personId, int relatedPersonId, RelationshipType relationshipType)
     {

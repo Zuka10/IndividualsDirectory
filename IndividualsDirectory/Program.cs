@@ -4,9 +4,7 @@ using IndividualsDirectory.Application;
 using IndividualsDirectory.Application.Common;
 using IndividualsDirectory.Domain.Abstractions;
 using IndividualsDirectory.Infrastructure;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
