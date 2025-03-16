@@ -18,83 +18,57 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         }
         catch (RelationshipAlreadyExistsException)
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            await context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
-            {
-                Type = "ValidationError",
-                Errors = new List<ValidationError>
-            {
-                new ValidationError
-                {
-                    Field = string.Empty,
-                    Messages = new List<string> { "The relationship already exists." }
-                }
-            }
-            }));
+            await CreateErrorResponse(context,
+                StatusCodes.Status400BadRequest,
+                "ValidationError",
+                "The relationship already exists.");
         }
         catch (RelationshipDoesNotExistsException)
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            await context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
-            {
-                Type = "ValidationError",
-                Errors = new List<ValidationError>
-            {
-                new ValidationError
-                {
-                    Field = string.Empty,
-                    Messages = new List<string> { "The relationship does not exist." }
-                }
-            }
-            }));
+            await CreateErrorResponse(context,
+                StatusCodes.Status400BadRequest,
+                "ValidationError",
+                "The relationship does not exist.");
         }
-        catch (PersonNotFoundException ex)
+        catch (PersonNotFoundException)
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-
-            // Create JSON error response
-            await context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
-            {
-                Type = "NotFoundError",
-                Errors = new List<ValidationError>
-            {
-                new ValidationError
-                {
-                    Field = string.Empty,
-                    Messages = new List<string> { "Person not found with following id." }
-                }
-            }
-            }));
+            await CreateErrorResponse(context,
+                StatusCodes.Status404NotFound,
+                "NotFoundError",
+                "Person not found with following id.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An unhandled exception occurred");
-
-            await HandleExceptionAsync(context, ex);
+            await CreateErrorResponse(context,
+                StatusCodes.Status500InternalServerError,
+                "ServerError",
+                "An unexpected error occurred");
         }
     }
 
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task CreateErrorResponse(
+        HttpContext context,
+        int statusCode,
+        string errorType,
+        string errorMessage)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.StatusCode = statusCode;
 
-        return context.Response.WriteAsync(JsonSerializer.Serialize(new ErrorResponse
+        var errorResponse = new ErrorResponse
         {
-            Type = "ServerError",
+            Type = errorType,
             Errors = new List<ValidationError>
             {
                 new ValidationError
                 {
                     Field = string.Empty,
-                    Messages = new List<string> { "An unexpected error occurred" }
+                    Messages = new List<string> { errorMessage }
                 }
             }
-        }.ToString()));
+        };
+
+        return context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
     }
 }

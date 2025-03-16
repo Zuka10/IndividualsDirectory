@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndividualsDirectory.Api", "IndividualsDirectory\IndividualsDirectory.Api.csproj", "{B8885539-DDCE-4291-A96C-AF6D2E7B9148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndividualsDirectory.Api", "IndividualsDirectory\IndividualsDirectory.Api.csproj", "{B8885539-DDCE-4291-A96C-AF6D2E7B9148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndividualsDirectory.Domain", "IndividualsDirectory.Domain\IndividualsDirectory.Domain.csproj", "{2F3B3FBD-1236-4612-889D-617D2AFEC17D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndividualsDirectory.Domain", "IndividualsDirectory.Domain\IndividualsDirectory.Domain.csproj", "{2F3B3FBD-1236-4612-889D-617D2AFEC17D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndividualsDirectory.Application", "IndividualsDirectory.Application\IndividualsDirectory.Application.csproj", "{06A3956A-AC41-4E87-B2DC-94160D0DE630}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndividualsDirectory.Application", "IndividualsDirectory.Application\IndividualsDirectory.Application.csproj", "{06A3956A-AC41-4E87-B2DC-94160D0DE630}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndividualsDirectory.Infrastructure", "IndividualsDirectory.Infrastructure\IndividualsDirectory.Infrastructure.csproj", "{9CAF1F36-36A0-4626-8429-59AEB406185D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndividualsDirectory.Infrastructure", "IndividualsDirectory.Infrastructure\IndividualsDirectory.Infrastructure.csproj", "{9CAF1F36-36A0-4626-8429-59AEB406185D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C047A678-7923-4DAB-90DE-A26A49E3D9A7}"
+	ProjectSection(SolutionItems) = preProject
+		DatabaseQuery.sql = DatabaseQuery.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
