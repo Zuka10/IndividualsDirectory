@@ -6,7 +6,7 @@ namespace IndividualsDirectory.Application.Person.Query.RelatedReport;
 
 public class GetRelatedIndividualsReportQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetRelatedIndividualsReportQuery, List<RelatedIndividualsReportModel>>
 {
-    public IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<List<RelatedIndividualsReportModel>> Handle(GetRelatedIndividualsReportQuery request, CancellationToken cancellationToken)
     {
