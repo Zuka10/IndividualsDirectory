@@ -1,15 +1,13 @@
 ﻿using AutoMapper;
 using IndividualsDirectory.Domain.Abstractions;
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 
 namespace IndividualsDirectory.Application.Person.Command.Create;
 
-public class CreatePersonCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment webHostEnvironment) : IRequestHandler<CreatePersonCommand, int>
+public class CreatePersonCommandHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreatePersonCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
-    private readonly IWebHostEnvironment _webHostEnvironment = webHostEnvironment;
 
     public async Task<int> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
     {
