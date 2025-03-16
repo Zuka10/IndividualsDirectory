@@ -49,35 +49,41 @@ public class PersonController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] CreatePersonCommand command)
     {
-        await _mediator.Send(command);
-        return Ok("Created successfully");
+        var personId = await _mediator.Send(command);
+
+        return CreatedAtAction(
+            nameof(Get),
+            new { id = personId },
+            new { message = "Created successfully", id = personId }
+        );
     }
 
-    [HttpPost("/AddRelatedPerson")]
+    [HttpPost("relationship")]
     public async Task<IActionResult> AddRelated([FromForm] AddRelatedPersonCommand command)
     {
         await _mediator.Send(command);
-        return Ok("Added successfully");
+
+        return Ok(new { message = "Related person added successfully" });
     }
 
-    [HttpDelete("/RemoveRelatedPerson")]
+    [HttpDelete("relationship")]
     public async Task<IActionResult> RemoveRelated([FromForm] RemoveRelatedPersonCommand command)
     {
         await _mediator.Send(command);
-        return Ok("Removed successfully");
+        return Ok(new { message = "Related person removed successfully" });
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromForm] UpdatePersonCommand command)
     {
         await _mediator.Send(command);
-        return Ok("Updated successfully");
+        return Ok(new { message = "Person updated successfully" });
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _mediator.Send(new DeletePersonCommand { Id = id });
-        return Ok("Deleted successfuly");
+        return NoContent();
     }
 }

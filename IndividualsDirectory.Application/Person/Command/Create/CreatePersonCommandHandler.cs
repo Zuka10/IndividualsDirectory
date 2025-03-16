@@ -32,6 +32,8 @@ public class CreatePersonCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, 
         }
 
         await _unitOfWork.PersonRepository.AddAsync(person, cancellationToken);
-        return await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return person.Id;
     }
 }

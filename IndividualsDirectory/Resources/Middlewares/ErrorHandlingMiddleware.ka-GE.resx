@@ -117,29 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="An unexpected error occurred" xml:space="preserve">
+    <value>მოხდა მოულოდნელი შეცდომა</value>
+  </data>
   <data name="InvalidFormat" xml:space="preserve">
     <value>არასწორი ფორმატი</value>
+  </data>
+  <data name="NotFoundError" xml:space="preserve">
+    <value>ვერ მოძებნის შეცდომა</value>
   </data>
   <data name="NumberRequired" xml:space="preserve">
     <value>საჭიროა რიცხვითი მნიშვნელობა</value>
   </data>
-  <data name="Person not found with following id." xml:space="preserve">
-    <value>პიროვნება ვერ მოიძებნა შემდეგი id-ით.</value>
+  <data name="Person and related person cannot be the same" xml:space="preserve">
+    <value>პირი და დაკავშირებული პირი ვერ იქნება ერთიდაიგივე</value>
+  </data>
+  <data name="Person not found with following id" xml:space="preserve">
+    <value>პიროვნება ვერ მოიძებნა შემდეგი ID-ით</value>
+  </data>
+  <data name="PersonNotFound" xml:space="preserve">
+    <value>პიროვნება ვერ მოიძებნა შემდეგი id-ით</value>
+  </data>
+  <data name="Relationship already exists" xml:space="preserve">
+    <value>ურთიერთობა უკვე არსებობს</value>
+  </data>
+  <data name="Relationship does not exists" xml:space="preserve">
+    <value>ურთიერთობა არ არსებობს</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>ეს ველი აუცილებელია</value>
   </data>
   <data name="ServerError" xml:space="preserve">
     <value>სერვერის შეცდომა</value>
-  </data>
-  <data name="The relationship already exists." xml:space="preserve">
-    <value>ურთიერთობა უკვე არსებობს.</value>
-  </data>
-  <data name="The relationship does not exist." xml:space="preserve">
-    <value>ურთიერთობა არ არსებობს.</value>
-  </data>
-  <data name="UnexpectedError" xml:space="preserve">
-    <value>მოხდა მოულოდნელი შეცდომა</value>
   </data>
   <data name="ValidationError" xml:space="preserve">
     <value>ვალიდაციის შეცდომა</value>

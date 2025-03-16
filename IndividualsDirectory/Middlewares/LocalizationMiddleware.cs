@@ -8,9 +8,9 @@ public class LocalizationMiddleware(RequestDelegate next)
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var supportedCultures = new[] { "en-US", "ka-GE", "fr-FR", "es-ES" };
+        var supportedCultures = new[] { "en-US", "ka-GE" };
 
-        var acceptLanguageHeader = context.Request.Headers["Accept-Language"].ToString();
+        var acceptLanguageHeader = context.Request.Headers.AcceptLanguage.ToString();
 
         string selectedCulture = "en-US";
 
