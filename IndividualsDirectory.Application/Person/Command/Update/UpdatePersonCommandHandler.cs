@@ -1,12 +1,14 @@
 ﻿using IndividualsDirectory.Application.Exceptions;
 using IndividualsDirectory.Domain.Abstractions;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace IndividualsDirectory.Application.Person.Command.Update;
 
-public class UpdatePersonCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdatePersonCommand, bool>
+public class UpdatePersonCommandHandler(IUnitOfWork unitOfWork, IMemoryCache memoryCache) : IRequestHandler<UpdatePersonCommand, bool>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public async Task<bool> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
     {
@@ -19,6 +21,9 @@ public class UpdatePersonCommandHandler(IUnitOfWork unitOfWork) : IRequestHandle
 
         await _unitOfWork.PersonRepository.UpdateAsync(person, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        _memoryCache.Remove(CacheKeys.AllPersons);
+        _memoryCache.Remove(CacheKeys.RelatedIndividualsReport);
 
         return true;
     }

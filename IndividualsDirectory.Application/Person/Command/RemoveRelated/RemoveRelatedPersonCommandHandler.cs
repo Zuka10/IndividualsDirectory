@@ -1,12 +1,14 @@
 ﻿using IndividualsDirectory.Application.Exceptions;
 using IndividualsDirectory.Domain.Abstractions;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace IndividualsDirectory.Application.Person.Command.RemoveRelated;
 
-public class RemoveRelatedPersonCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<RemoveRelatedPersonCommand, bool>
+public class RemoveRelatedPersonCommandHandler(IUnitOfWork unitOfWork, IMemoryCache memoryCache) : IRequestHandler<RemoveRelatedPersonCommand, bool>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public async Task<bool> Handle(RemoveRelatedPersonCommand request, CancellationToken cancellationToken)
     {
@@ -14,6 +16,10 @@ public class RemoveRelatedPersonCommandHandler(IUnitOfWork unitOfWork) : IReques
 
         await _unitOfWork.PersonRepository.DeleteRelatedIndividualAsync(request.PersonId, request.RelatedPersonId);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        _memoryCache.Remove(CacheKeys.AllPersons);
+        _memoryCache.Remove(CacheKeys.RelatedIndividualsReport);
+
         return true;
     }
 }
