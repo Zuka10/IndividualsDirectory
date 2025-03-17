@@ -24,6 +24,7 @@ public class CreatePersonCommand : IRequest<int>
     [Required]
     public DateTime BirthDate { get; set; }
 
+    [Range(1, int.MaxValue)]
     public int CityId { get; set; }
 
     public List<PhoneNumberDto> PhoneNumbers { get; set; } = [];
