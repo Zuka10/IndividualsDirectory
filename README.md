@@ -11,6 +11,7 @@
 - **AutoMapper**: Automatic object-to-object mapping for smoother transformation between layers.
 - **Unit Testing**: Using xUnit and Moq for unit tests to ensure quality code.
 - **Repository & UnitOfWork Pattern**: For handling data access in a clean and abstracted way.
+- **IMemoryCache**: In-memory caching to improve performance by reducing redundant database queries.
 
 ## Technologies
 
@@ -21,6 +22,7 @@
 - **xUnit**: A unit testing framework for .NET.
 - **Moq**: A mocking framework for unit tests.
 - **Entity Framework Core**: ORM for working with the database.
+- **IMemoryCache**: A built-in caching mechanism in .NET to store frequently accessed data in memory
 
 ## Getting Started
 
