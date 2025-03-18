@@ -2,6 +2,7 @@
 using IndividualsDirectory.Application.Exceptions;
 using IndividualsDirectory.Infrastructure.Exceptions;
 using Microsoft.Extensions.Localization;
+using System.Net;
 using System.Text.Json;
 
 namespace IndividualsDirectory.Api.Middlewares;
@@ -18,66 +19,45 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         {
             await _next(context);
         }
-        catch (RelationshipAlreadyExistsException)
-        {
-            await CreateErrorResponse(context,
-                StatusCodes.Status400BadRequest,
-                _localizer["ValidationError"],
-                _localizer["Relationship already exists"]);
-        }
-        catch (RelationshipDoesNotExistsException)
-        {
-            await CreateErrorResponse(context,
-                StatusCodes.Status400BadRequest,
-                _localizer["ValidationError"],
-                _localizer["Relationship does not exists"]);
-        }
-        catch (RelatedPersonIsSameAsPersonException)
-        {
-            await CreateErrorResponse(context,
-                StatusCodes.Status400BadRequest,
-                _localizer["ValidationError"],
-                _localizer["Person and related person cannot be the same"]);
-        }
-        catch (PersonNotFoundException)
-        {
-            await CreateErrorResponse(context,
-                StatusCodes.Status404NotFound,
-                _localizer["NotFoundError"],
-                _localizer["Person not found with following id"]);
-        }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An unhandled exception occurred");
-            await CreateErrorResponse(context,
-                StatusCodes.Status500InternalServerError,
-                _localizer["ServerError"],
-                _localizer["An unexpected error occurred"]);
+            await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static Task CreateErrorResponse(
-        HttpContext context,
-        int statusCode,
-        string errorType,
-        string errorMessage)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
+        _logger.LogError(exception, "An exception occurred: {ExceptionType}", exception.GetType().Name);
+
+        var errorDetails = GetErrorDetails(exception);
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = statusCode;
+        context.Response.StatusCode = errorDetails.StatusCode;
 
         var errorResponse = new ErrorResponse
         {
-            Type = errorType,
+            Type = errorDetails.ErrorType,
             Errors = new List<ValidationError>
             {
                 new ValidationError
                 {
                     Field = string.Empty,
-                    Messages = new List<string> { errorMessage }
+                    Messages = new List<string> { errorDetails.Message }
                 }
             }
         };
 
-        return context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+        await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+    }
+
+    private (int StatusCode, string ErrorType, string Message) GetErrorDetails(Exception ex)
+    {
+        return ex switch
+        {
+            RelationshipAlreadyExistsException => ((int)HttpStatusCode.BadRequest, _localizer["ValidationError"], _localizer["Relationship already exists"]),
+            RelationshipDoesNotExistsException => ((int)HttpStatusCode.BadRequest, _localizer["ValidationError"], _localizer["Relationship does not exist"]),
+            RelatedPersonIsSameAsPersonException => ((int)HttpStatusCode.BadRequest, _localizer["ValidationError"], _localizer["Person and related person cannot be the same"]),
+            PersonNotFoundException => ((int)HttpStatusCode.NotFound, _localizer["NotFoundError"], _localizer["Person not found with the provided ID"]),
+            _ => ((int)HttpStatusCode.InternalServerError, _localizer["ServerError"], _localizer["An unexpected error occurred"])
+        };
     }
 }
